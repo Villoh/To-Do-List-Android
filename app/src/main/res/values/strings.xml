@@ -2,4 +2,6 @@
     <string name="app_name">To Do List</string>
     <string name="to_do_incioTextView">To Do</string>
     <string name="app_logo_content_description">App Logo</string>
+    <string name="text_view_fecha_tarea">24–2–2023</string>
+    <string name="checkbox_tarea">Tarea 1</string>
 </resources>
