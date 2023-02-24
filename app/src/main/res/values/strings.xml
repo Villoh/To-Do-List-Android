@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">To Do List</string>
+    <string name="to_do_incioTextView">To Do</string>
+    <string name="app_logo_content_description">App Logo</string>
+</resources>
