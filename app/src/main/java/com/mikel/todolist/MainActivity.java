@@ -1,10 +1,16 @@
 package com.mikel.todolist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerViewTareas;
+    private FloatingActionButton buttonAnadir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
