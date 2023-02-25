@@ -4,7 +4,8 @@
     <string name="app_logo_content_description">App Logo</string>
     <string name="text_view_fecha_tarea">24–2–2023</string>
     <string name="checkbox_tarea">Tarea 1</string>
-    <string name="anadir_tarea_text_view_fecha">Establecer fecha de finalización</string>
+    <string name="anadir_tarea_text_view_fecha">Fecha de finalización</string>
     <string name="anadir_tarea_button_guardar">Guardar</string>
     <string name="anadir_tarea_text_view_tarea_hint">Escribe la tarea aquí…</string>
+    <string name="add_image">Añadir</string>
 </resources>

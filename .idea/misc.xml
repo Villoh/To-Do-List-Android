@@ -9,7 +9,8 @@
         <entry key="..\:/AndroidProjects/ToDoList/app/src/main/res/layout/activity_incio.xml" value="0.33" />
         <entry key="..\:/AndroidProjects/ToDoList/app/src/main/res/layout/activity_inicio.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/ToDoList/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/AndroidProjects/ToDoList/app/src/main/res/layout/anadir_nueva_tarea.xml" value="0.22" />
+        <entry key="..\:/AndroidProjects/ToDoList/app/src/main/res/layout/add_new_task.xml" value="0.4578125" />
+        <entry key="..\:/AndroidProjects/ToDoList/app/src/main/res/layout/anadir_nueva_tarea.xml" value="0.33" />
         <entry key="..\:/AndroidProjects/ToDoList/app/src/main/res/layout/recycler_tarea.xml" value="0.365625" />
       </map>
     </option>
