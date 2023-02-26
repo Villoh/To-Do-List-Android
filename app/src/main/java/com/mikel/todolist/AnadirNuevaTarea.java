@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,6 +41,7 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
     private Context context;
     private DatabaseHandler db;
     private ViewGroup viewGroupToast;
+    private MediaPlayer sonido;
 
     public static AnadirNuevaTarea newInstance(){
         return new AnadirNuevaTarea();
@@ -149,6 +151,8 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
                 ToastHandler.toastMsg(context, LayoutInflater.from(context), null,"Tarea creada");
             }
             dismiss();
+            sonido = MediaPlayer.create(getContext(), R.raw.nueva_tarea);
+            sonido.start();
         });
     }
 

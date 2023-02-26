@@ -1,10 +1,13 @@
 package com.mikel.todolist.Adaptador;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +18,6 @@ import com.mikel.todolist.AnadirNuevaTarea;
 import com.mikel.todolist.MainActivity;
 import com.mikel.todolist.Modelo.Tarea;
 import com.mikel.todolist.R;
-import com.mikel.todolist.Tasks.OnBindTask;
 import com.mikel.todolist.Utils.DatabaseHandler;
 
 import java.util.List;
@@ -42,11 +44,34 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final Tarea tarea = listaTareas.get(position);
-        OnBindTask onBindTask = new OnBindTask(tarea, holder.mCheckBoxTarea, holder.textViewFechaFinRecycler, holder.itemView, db);
-        onBindTask.execute();
+        holder.mCheckBoxTarea.setText(tarea.getDescTarea());
+        holder.textViewFechaFinRecycler.setText(tarea.getFechaFin());
+        holder.mCheckBoxTarea.setChecked(toBoolean(tarea.getEstado()));
+        if (holder.mCheckBoxTarea.isChecked()) {
+            holder.mCheckBoxTarea.setPaintFlags(holder.mCheckBoxTarea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
+        holder.mCheckBoxTarea.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                holder.mCheckBoxTarea.setPaintFlags(holder.mCheckBoxTarea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                db.actualizarEstado(tarea.getId(), 1);
+            } else {
+                holder.mCheckBoxTarea.setPaintFlags(holder.mCheckBoxTarea.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                db.actualizarEstado(tarea.getId(), 0);
+            }
+        });
+
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.deslizar_desde_derecha);
+        holder.itemView.startAnimation(animation);
     }
 
-
+    /**
+     * Convierte un entero a boolean
+     * @param n el número a convertir
+     * @return boolean
+     */
+    private boolean toBoolean(int n) {
+        return n != 0;
+    }
 
     @Override
     public int getItemCount() {
