@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -29,12 +28,9 @@ public class InicioActivity extends AppCompatActivity {
         logoApp.setAnimation(animacionAparecer);
         //Se inicia la actividad inicio y pasados los 4 segundos se muestra la actividad principal.
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(InicioActivity.this, MainActivity.class));
-                finish();
-            }
+        handler.postDelayed(() -> {
+            startActivity(new Intent(InicioActivity.this, MainActivity.class));
+            finish();
         }, 1000);
     }
 }

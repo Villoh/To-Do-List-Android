@@ -44,8 +44,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void openDatabase() {
+    public void abreDB() {
         db = this.getWritableDatabase();
+    }
+
+    public void cierraDB(){
+        db.close();
     }
 
     /**
@@ -76,6 +80,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         Tarea tarea = new Tarea();
                         tarea.setId(cur.getInt(cur.getColumnIndexOrThrow(ID)));
                         tarea.setDescTarea(cur.getString(cur.getColumnIndexOrThrow(DESC_TAREA)));
+                        tarea.setFechaFin(cur.getString(cur.getColumnIndexOrThrow(FECHA_FIN)));
                         tarea.setEstado(cur.getInt(cur.getColumnIndexOrThrow(ESTADO)));
                         taskList.add(tarea);
                     }
@@ -130,5 +135,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public void borrarTarea(int id){
         db.delete(TAREA_TABLE, ID + "= ?", new String[] {String.valueOf(id)});
+    }
+
+    /**
+     * Borra todas las tareas de la BD
+     */
+    public void borrarTareas(){
+        db.delete(TAREA_TABLE, null, null);
     }
 }

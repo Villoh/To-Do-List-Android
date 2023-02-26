@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,15 +17,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import com.mikel.todolist.Modelo.Tarea;
 import com.mikel.todolist.Utils.DatabaseHandler;
+import com.mikel.todolist.Utils.ToastHandler;
 
 import java.util.Calendar;
-import java.util.Objects;
 
 public class AnadirNuevaTarea extends BottomSheetDialogFragment {
 
@@ -37,12 +34,20 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
     private TextView textViewFechaFin;
 
     private String fechaFin = "";
+    private boolean fechaModificada = false;
+    private boolean isUpdate = false;
 
     private Context context;
     private DatabaseHandler db;
+    private ViewGroup viewGroupToast;
 
     public static AnadirNuevaTarea newInstance(){
         return new AnadirNuevaTarea();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -59,7 +64,7 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
         buttonGuardarTarea = view.findViewById(R.id.buttonGuardarTarea);
         textViewFechaFin = view.findViewById(R.id.textViewFechaFin);
 
-        boolean isUpdate = false;
+        isUpdate = false;
 
         //Comprueba que esté actualizando la tarea o creando una nueva
         final Bundle bundle = getArguments();
@@ -68,15 +73,17 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
             String desc_tarea = bundle.getString("desc_tarea");
             fechaFin = bundle.getString("fecha_fin");
             editTextTarea.setText(desc_tarea);
+            textViewFechaFin.setText(fechaFin);
             assert desc_tarea != null;
             if(desc_tarea.length()>0){
-                buttonGuardarTarea.setEnabled(false);
+                buttonGuardarTarea.setEnabled(true);
+                fechaModificada = true;
             }
         }
 
         //Abre la base de datos
         db = new DatabaseHandler(getActivity());
-        db.openDatabase();
+        db.abreDB();
 
         //Listener para detectar cambios en el editText, de esta forma si esta vacío el botón estará desactivado
         editTextTarea.addTextChangedListener(new TextWatcher() {
@@ -86,7 +93,7 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                buttonGuardarTarea.setEnabled(!s.toString().equals(""));
+                buttonGuardarTarea.setEnabled(!s.toString().equals("") && fechaModificada);
             }
 
             @Override
@@ -116,6 +123,8 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
                     month = month + 1;
                     textViewFechaFin.setText(dayOfMonth + "/" + month + "/" + year);
                     fechaFin = dayOfMonth + "/" + month +"/"+year;
+                    fechaModificada = true;
+                    buttonGuardarTarea.setEnabled(!editTextTarea.getText().toString().equals("") && fechaModificada);
                 }
             } , YEAR , MONTH , DAY);
 
@@ -136,6 +145,8 @@ public class AnadirNuevaTarea extends BottomSheetDialogFragment {
                 tarea.setFechaFin(fechaFin);
                 tarea.setEstado(0);
                 db.insertarTarea(tarea);
+                ToastHandler.removeToastMsg();
+                ToastHandler.toastMsg(context, LayoutInflater.from(context), null,"Tarea creada");
             }
             dismiss();
         });

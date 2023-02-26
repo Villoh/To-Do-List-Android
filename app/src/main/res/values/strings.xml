@@ -8,4 +8,5 @@
     <string name="anadir_tarea_button_guardar">Guardar</string>
     <string name="anadir_tarea_text_view_tarea_hint">Escribe la tarea aquí…</string>
     <string name="add_image">Añadir</string>
+    <string name="menu_borrar_todo">Borrar Todo</string>
 </resources>

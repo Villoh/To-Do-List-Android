@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +15,7 @@ import com.mikel.todolist.AnadirNuevaTarea;
 import com.mikel.todolist.MainActivity;
 import com.mikel.todolist.Modelo.Tarea;
 import com.mikel.todolist.R;
+import com.mikel.todolist.Tasks.OnBindTask;
 import com.mikel.todolist.Utils.DatabaseHandler;
 
 import java.util.List;
@@ -40,28 +41,12 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        db.openDatabase();
-
         final Tarea tarea = listaTareas.get(position);
-        holder.mCheckBoxTarea.setText(tarea.getDescTarea());
-        holder.mCheckBoxTarea.setChecked(toBoolean(tarea.getEstado()));
-        holder.mCheckBoxTarea.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                db.actualizarEstado(tarea.getId(), 1);
-            } else {
-                db.actualizarEstado(tarea.getId(), 0);
-            }
-        });
+        OnBindTask onBindTask = new OnBindTask(tarea, holder.mCheckBoxTarea, holder.textViewFechaFinRecycler, holder.itemView, db);
+        onBindTask.execute();
     }
 
-    /**
-     * Convierte un entero a boolean
-     * @param n el número a convertir
-     * @return boolean
-     */
-    private boolean toBoolean(int n) {
-        return n != 0;
-    }
+
 
     @Override
     public int getItemCount() {
@@ -96,6 +81,12 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
         notifyItemRemoved(position);
     }
 
+    public void borrarTareas(){
+        db.borrarTareas();
+        listaTareas.clear();
+        notifyDataSetChanged();
+    }
+
     /**
      * Editar una determinada tarea
      * @param position posición de la tarea a editar
@@ -113,10 +104,11 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCheckBox mCheckBoxTarea;
-
+        TextView textViewFechaFinRecycler;
         ViewHolder(View view) {
             super(view);
             mCheckBoxTarea = view.findViewById(R.id.mCheckBoxTarea);
+            textViewFechaFinRecycler = view.findViewById(R.id.textViewFechaFinRecycler);
         }
     }
 }
