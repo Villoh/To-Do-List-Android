@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DialogCloseListener{
 
     private RecyclerView recyclerViewTareas;
     private FloatingActionButton fabAnadir;
@@ -38,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerViewTareas = findViewById(R.id.recyclerViewTareas);
         recyclerViewTareas.setLayoutManager(new LinearLayoutManager(this));
-        //adaptadorTareas = new AdaptadorTareas(db,MainActivity.this);
-        //recyclerViewTareas.setAdapter(adaptadorTareas);
+        adaptadorTareas = new AdaptadorTareas(db,MainActivity.this);
+        recyclerViewTareas.setAdapter(adaptadorTareas);
 
 //        ItemTouchHelper itemTouchHelper = new
 //                ItemTouchHelper(new RecyclerItemTouchHelper(adaptadorTareas));
@@ -50,8 +51,16 @@ public class MainActivity extends AppCompatActivity {
         listaTareas = db.obtenerTareas();
         Collections.reverse(listaTareas);
 
-        //adaptadorTareas.setTareas(listaTareas);
+        adaptadorTareas.cargaTareas(listaTareas);
 
         fabAnadir.setOnClickListener(v -> AnadirNuevaTarea.newInstance().show(getSupportFragmentManager(), AnadirNuevaTarea.TAG));
+    }
+
+    @Override
+    public void handleDialogClose(DialogInterface dialog){
+        listaTareas = db.obtenerTareas();
+        Collections.reverse(listaTareas);
+        adaptadorTareas.cargaTareas(listaTareas);
+        adaptadorTareas.notifyDataSetChanged();
     }
 }
